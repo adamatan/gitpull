@@ -44,9 +44,10 @@ def get_list_of_git_directories():
     dirs = ['/'.join(path.split('/')[:-1]) for path in dirs]
     return sorted(dirs)
 
-def run_git_concurrently():
+def run_git_concurrently(base_dir):
     """Runs the 'git status' and 'git pull' commands in threads and reports
     the results in a pretty table."""
+    os.chdir(base_dir)
     git_dirs = get_list_of_git_directories()
     print("Processing %d git repos: %s" % (len(git_dirs), ', '.join(git_dirs)))
 
@@ -100,6 +101,3 @@ def run_git_concurrently():
             thread = threads[git_dir]
             print colored('%s: ' % git_dir, 'red')
             print thread.git_pull_output
-
-if __name__ == '__main__':
-    run_git_concurrently()
